@@ -1,2 +1,5 @@
-package org.school.timetableschedulingsystem.models.enums;public enum Role {
+package org.school.timetableschedulingsystem.models.enums;
+
+public enum Role {
+    ADMIN
 }

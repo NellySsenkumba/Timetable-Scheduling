@@ -1,14 +1,20 @@
-package org.school.timetableschedulingsystem.models;
+package org.school.timetableschedulingsystem.models.database;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.school.timetableschedulingsystem.models.enums.DaysOfTheWeek;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +29,11 @@ public class Teacher {
     private LocalDateTime registeredOn;
 
 
-    Available time(only for part-timers)
+    Set<DaysOfTheWeek> availableTime;//(only for part-timers)
 
-    Status
+    private String status;
+
+    @ManyToMany
     Set<Subject> subjects; //<dono whether this    should be     here on    in the Subjects table>
 
 
