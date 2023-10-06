@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Timetable {
+public class Timeslot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
