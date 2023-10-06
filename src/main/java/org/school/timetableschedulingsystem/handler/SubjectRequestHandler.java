@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SubjectRequestHandler extends ServiceHandler {
+public class SubjectRequestHandler extends RequestHandler {
     private final SubjectServiceImpl subjectServiceImpl;
 
     @Override
@@ -26,7 +26,7 @@ public class SubjectRequestHandler extends ServiceHandler {
                 return subjectServiceImpl.updateSubject(request);
             }
             default: {
-                return nextServiceHandler.handleRequest(request);
+                return nextRequestHandler.handleRequest(request);
             }
         }
 

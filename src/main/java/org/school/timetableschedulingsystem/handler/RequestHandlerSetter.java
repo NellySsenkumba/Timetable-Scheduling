@@ -15,6 +15,7 @@ public class RequestHandlerSetter {
     @Bean
     public void setOrder() {
         teacherRequestHandler.setNextRequestHandler(subjectRequestHandler);
+
         subjectRequestHandler.setNextRequestHandler(lastRequestHandler);
 
     }

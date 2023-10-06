@@ -2,20 +2,12 @@ package org.school.timetableschedulingsystem.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.school.timetableschedulingsystem.controller.ClientRequest;
-import org.school.timetableschedulingsystem.exceptions.MissingFieldsException;
-import org.school.timetableschedulingsystem.models.database.Teacher;
 import org.school.timetableschedulingsystem.teacher.TeacherService;
-import org.school.timetableschedulingsystem.teacher.dto.AddTeacherDto;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class TeacherServiceHandler extends ServiceHandler {
+public class TeacherRequestHandler extends RequestHandler {
 
     private final TeacherService teacherService;
 
@@ -31,7 +23,7 @@ public class TeacherServiceHandler extends ServiceHandler {
             }
 
             default: {
-                return nextServiceHandler.handleRequest(request);
+                return nextRequestHandler.handleRequest(request);
             }
         }
 

@@ -23,9 +23,8 @@ public class Lesson {
     @OneToOne
     private Stream stream;
 
-    @OneToOne
-    private Room room;
 
     @OneToOne
     private Subject subject;
+    private int hoursPerWeek;
 }

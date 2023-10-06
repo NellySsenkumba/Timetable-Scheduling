@@ -21,10 +21,6 @@ public class Subject {
 
     private String description;
 
-    @ManyToOne
-    private Department department;
 
-    @ManyToMany
-    private Set<Teacher> teacher;
 
 }

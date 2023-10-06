@@ -1,6 +1,6 @@
 package org.school.timetableschedulingsystem.utils;
 
-public class StringToLong {
+public class CustomUtils{
 
     public static long convertSubjectIdToLong(Object subjectId) {
         if (subjectId == null) {

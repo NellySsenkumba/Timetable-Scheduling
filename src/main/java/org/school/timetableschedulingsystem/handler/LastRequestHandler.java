@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class LastHandler extends RequestHandler {
+public class LastRequestHandler extends RequestHandler {
     @Override
     public Object handleRequest(ClientRequest clientRequest) {
         return "invalid action";

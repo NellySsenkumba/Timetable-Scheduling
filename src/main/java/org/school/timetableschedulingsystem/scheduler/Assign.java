@@ -1,18 +1,19 @@
 package org.school.timetableschedulingsystem.scheduler;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Assign {
-    private static final int DAYS = 5;
-    private static final int TIME_SLOTS = 11;
+    private static final int DAYS = 3;
+    private static final int TIME_SLOTS = 12;
     private static final int BREAK_1 = 3;
     private static final int BREAK_2 = 6;
     static String[] subjects = {"Mat", "Eng", "Sci", "SST"};
 
 
     static Random rd = new Random();
+
+
+    static Map<String ,Integer> numberOfPeriods=new HashMap<>();
 
     public static String[][] createTimetable() {
         String[][] table = new String[DAYS][TIME_SLOTS];
@@ -79,11 +80,11 @@ public class Assign {
         int y = position[1];
         int z = position[2];
 
-        if (y == 0 || y == 2 || y == BREAK_1+1 || y == BREAK_2+1) {
+        if (y == 0 || y == 2 || y == BREAK_1 + 1 || y == BREAK_2 + 1||y==TIME_SLOTS-2) {
             table[x][y + 1] = subjects[z];
         }
 
-        if (y == 1 || y == BREAK_1 || y == BREAK_2 || y == TIME_SLOTS) {
+        if (y == 1 || y == BREAK_1 || y == BREAK_2 || y == TIME_SLOTS-1) {
             table[x][y - 1] = subjects[z];
         }
 
@@ -113,6 +114,31 @@ public class Assign {
             abreak = BREAK_2;
         } else abreak = BREAK_1;
         return subjects[position[2]].equals(subject) && position[1] > abreak;
+    }
+
+
+    //lesson in a bracket  cant appear in with spaces
+    public static boolean repeated(String[][] table, int[] position) {
+        int location;
+        if (position[1] <= BREAK_1) {
+            location = BREAK_1;
+
+
+        } else if (position[1] <= BREAK_2) {
+            location = BREAK_2;
+
+        } else {
+            location = TIME_SLOTS;
+        }
+
+
+        return false;
+    }
+
+
+    //setting the number of periods of a subjects
+    public static void getPeriodNumber(String subject,int maxNumber){
+//numberOfPeriods
     }
 }
 

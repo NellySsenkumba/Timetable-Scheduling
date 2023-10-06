@@ -22,7 +22,6 @@ public class Timeslot {
 
     @ManyToMany
     private List<Lesson> lessons;
-
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Date day;

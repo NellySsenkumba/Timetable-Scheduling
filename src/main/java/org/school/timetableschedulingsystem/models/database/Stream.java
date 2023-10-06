@@ -21,15 +21,8 @@ public class Stream {
 
     private String name;
 
-    @ManyToOne
-    private Class aclass;
-
     @OneToOne
     private Teacher classTeacher;
-
-
-    @OneToOne
-    private Room classRoom;
 
 
     @ManyToOne

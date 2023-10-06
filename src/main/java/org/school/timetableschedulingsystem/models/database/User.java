@@ -6,46 +6,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import org.school.timetableschedulingsystem.models.enums.Role;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.Collection;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
-public class User extends Teacher implements UserDetails {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User extends Teacher {
     private String username;
     private String password;
-    private Role role;
+    private String role;
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

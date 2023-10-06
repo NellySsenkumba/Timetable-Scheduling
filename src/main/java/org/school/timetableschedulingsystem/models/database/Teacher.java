@@ -33,8 +33,5 @@ public class Teacher {
 
     private String status;
 
-    @ManyToMany
-    Set<Subject> subjects; //<dono whether this    should be     here on    in the Subjects table>
-
 
 }

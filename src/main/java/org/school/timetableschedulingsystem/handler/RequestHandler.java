@@ -3,13 +3,12 @@ package org.school.timetableschedulingsystem.handler;
 
 import org.school.timetableschedulingsystem.controller.ClientRequest;
 
-import java.util.Map;
+public abstract class RequestHandler {
+    protected RequestHandler nextRequestHandler;
 
-public abstract class ServiceHandler {
-    protected ServiceHandler nextServiceHandler;
     abstract Object handleRequest(ClientRequest clientRequest);
 
-    void setNextServiceHandler(ServiceHandler nextServiceHandler){
-        this.nextServiceHandler=nextServiceHandler;
+    void setNextRequestHandler(RequestHandler nextRequestHandler) {
+        this.nextRequestHandler = nextRequestHandler;
     }
 }
