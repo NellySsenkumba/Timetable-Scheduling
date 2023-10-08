@@ -15,9 +15,11 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "teacher_type")
 public class Teacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String firstName;
     private String lastName;
@@ -27,9 +29,6 @@ public class Teacher {
     private String dateOfBirth;
 
     private LocalDateTime registeredOn;
-
-
-    Set<DaysOfTheWeek> availableTime;//(only for part-timers)
 
     private String status;
 

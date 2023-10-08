@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.school.timetableschedulingsystem.models.database.keys.LessonCompositePrimaryKey;
 
 @Entity
 @Builder
@@ -13,18 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(name="teacher_stream_subject_unique_key",columnNames = {"teacher_id","stream_id","subject_id"}))
 public class Lesson {
-    @Id
+    @EmbeddedId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @OneToOne
-    private Teacher teacher;
-
-    @OneToOne
-    private Stream stream;
-
-
-    @OneToOne
-    private Subject subject;
+    private LessonCompositePrimaryKey id;
     private int hoursPerWeek;
 }

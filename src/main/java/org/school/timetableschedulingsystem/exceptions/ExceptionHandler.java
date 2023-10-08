@@ -10,8 +10,8 @@ public class ExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleException(Exception exception) {
         return new ResponseEntity<>(
                 new ExceptionResponse(
-                        exception.getMessage(),
-                        exception.getLocalizedMessage(),
+                        "-1",
+                        exception.getLocalizedMessage()+exception.getCause(),
                         java.time.LocalDateTime.now()
                 ),
                 HttpStatus.NOT_ACCEPTABLE

@@ -1,6 +1,5 @@
 package org.school.timetableschedulingsystem.config;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -32,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException{
 
-        final String authHeader = request.getHeader("Authorization");//from the request hrear
+        final String authHeader = request.getHeader("Authorization");
 
         final String jwtToken;
 

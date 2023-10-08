@@ -17,11 +17,12 @@ public class UserService {
 
         User user = new User((String) data.get("username"),
                 data.get("password").toString(),
-                data.get("role").toString());
+                null);
+//                data.get("role").toString());
 
         System.out.println(data.get("who"));
-        System.out.println((Collection)data.get("who"));
-        System.out.println(data.getOrDefault("them","us"));
+        System.out.println((Collection) data.get("who"));
+        System.out.println(data.getOrDefault("them", "us"));
 
 
         return userRepository.saveAndFlush(user);
