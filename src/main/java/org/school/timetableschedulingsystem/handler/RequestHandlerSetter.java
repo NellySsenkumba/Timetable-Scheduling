@@ -10,13 +10,18 @@ import org.springframework.stereotype.Component;
 public class RequestHandlerSetter {
     private final TeacherRequestHandler teacherRequestHandler;
     private final SubjectRequestHandler subjectRequestHandler;
+    private final LessonRequestHandler lessonRequestHandler;
     private final LastRequestHandler lastRequestHandler;
+    private final StreamRequestHandler streamRequestHandler;
+    private final TimeslotRequestHandler timeslotRequestHandler;
 
     @Bean
     public void setOrder() {
         teacherRequestHandler.setNextRequestHandler(subjectRequestHandler);
-
-        subjectRequestHandler.setNextRequestHandler(lastRequestHandler);
+        subjectRequestHandler.setNextRequestHandler(lessonRequestHandler);
+        lessonRequestHandler.setNextRequestHandler(streamRequestHandler);
+        streamRequestHandler.setNextRequestHandler(timeslotRequestHandler);
+        timeslotRequestHandler.setNextRequestHandler(lastRequestHandler);
 
     }
 }

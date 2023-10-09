@@ -1,0 +1,14 @@
+package org.school.timetableschedulingsystem.timeslot.service;
+
+import org.school.timetableschedulingsystem.controller.ClientRequest;
+import org.school.timetableschedulingsystem.timeslot.dto.TimeslotResponse;
+
+import java.util.List;
+
+public interface TimeslotService {
+    TimeslotResponse addTimeslot(ClientRequest clientRequest);
+    List<TimeslotResponse> getTimeslot();
+
+    String assign();
+
+}

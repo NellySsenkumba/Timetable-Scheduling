@@ -1,5 +1,6 @@
 package org.school.timetableschedulingsystem.models.database;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @DiscriminatorValue("user")
 public class User extends Teacher implements UserDetails {
+    @Column(unique = true)
     private String username;
     private String password;
     @ManyToOne

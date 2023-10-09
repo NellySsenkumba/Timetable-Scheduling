@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.school.timetableschedulingsystem.models.database.keys.TimeslotCompositePrimaryKey;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,13 +20,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Timeslot {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @EmbeddedId
+    private TimeslotCompositePrimaryKey id;
 
     @ManyToMany
-    private List<Lesson> lessons;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Date day;
+    private Set<Lesson> lessons;
+
 }

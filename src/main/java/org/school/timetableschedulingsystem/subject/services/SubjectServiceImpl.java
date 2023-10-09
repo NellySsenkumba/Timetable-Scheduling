@@ -32,8 +32,7 @@ public class SubjectServiceImpl implements SubjectService {
     public SubjectResponseDto addSubject(ClientRequest request) {
         Map<String, Object> data = request.data();
         Field[] fields = AddSubjectDto.class.getDeclaredFields();
-        List<String> requiredFields = Arrays.stream(fields).map(Field::getName).toList();
-        if (!requiredFields.stream().allMatch(data::containsKey)) {
+        if (!Arrays.stream(fields).map(Field::getName).allMatch(data::containsKey)) {
             throw new MissingFieldsException();
         }
 
@@ -51,7 +50,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (!data.containsKey("id")) {
             throw new MissingFieldsException();
         }
-        long subjectId = CustomUtils.convertSubjectIdToLong(data.get("id"));
+        long subjectId = CustomUtils.convertStringToLong(data.get("id"));
 
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(
                 () -> new IllegalArgumentException("Subject does not exist")
@@ -72,7 +71,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (!data.containsKey("id")) {
             throw new MissingFieldsException();
         }
-        long subjectId = CustomUtils.convertSubjectIdToLong(data.get("id"));
+        long subjectId = CustomUtils.convertStringToLong(data.get("id"));
         if (!subjectRepository.existsById(subjectId)) {
             throw new IllegalArgumentException("Subject does not exist");
         }

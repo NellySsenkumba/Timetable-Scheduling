@@ -2,7 +2,7 @@ package org.school.timetableschedulingsystem.utils;
 
 public class CustomUtils{
 
-    public static long convertSubjectIdToLong(Object subjectId) {
+    public static long convertStringToLong(Object subjectId) {
         if (subjectId == null) {
             throw new IllegalArgumentException("Subject id cannot be null");
         }

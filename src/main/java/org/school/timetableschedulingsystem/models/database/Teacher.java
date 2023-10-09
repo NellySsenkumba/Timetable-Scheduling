@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.school.timetableschedulingsystem.models.enums.DaysOfTheWeek;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Data
@@ -24,10 +23,11 @@ public class Teacher {
     private String firstName;
     private String lastName;
     private String middleName;
+    @Column(unique = true)
     private String email;
     private int phoneNumber;
-    private String dateOfBirth;
-
+    private LocalDate dateOfBirth;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime registeredOn;
 
     private String status;

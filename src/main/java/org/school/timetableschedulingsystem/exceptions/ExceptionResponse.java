@@ -1,10 +1,15 @@
 package org.school.timetableschedulingsystem.exceptions;
 
-import java.time.LocalDateTime;
+
+import java.sql.Timestamp;
 
 public record ExceptionResponse(
         String status,
         String message,
-        LocalDateTime timestamp
+        String exception,
+        Timestamp timestamp
 ) {
+    public ExceptionResponse(String status, String message) {
+        this("-1", status, message, new Timestamp(System.currentTimeMillis()));
+    }
 }

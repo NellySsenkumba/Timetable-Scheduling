@@ -1,8 +1,28 @@
 package org.school.timetableschedulingsystem.scheduler;
 
+import lombok.RequiredArgsConstructor;
+import org.school.timetableschedulingsystem.lesson.repository.LessonRepository;
+import org.school.timetableschedulingsystem.models.database.Lesson;
+import org.school.timetableschedulingsystem.models.database.Stream;
+import org.school.timetableschedulingsystem.models.database.Subject;
+import org.school.timetableschedulingsystem.models.database.Timeslot;
+import org.school.timetableschedulingsystem.timeslot.TimeslotRepository;
+import org.school.timetableschedulingsystem.timeslot.dto.TimeslotResponse;
+import org.springframework.stereotype.Component;
+
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+@RequiredArgsConstructor
+@Component
 public class Assign {
+
+    private final LessonRepository lessonRepository;
+    private final TimeslotRepository timeslotRepository;
+
+
     private static final int DAYS = 3;
     private static final int TIME_SLOTS = 12;
     private static final int BREAK_1 = 3;
@@ -13,9 +33,11 @@ public class Assign {
     static Random rd = new Random();
 
 
-    static Map<String ,Integer> numberOfPeriods=new HashMap<>();
+    static Map<String, Integer> numberOfPeriods = new HashMap<>();
 
-    public static String[][] createTimetable() {
+
+    //generate timeslot
+    public static String[][] generateTimeslot() {
         String[][] table = new String[DAYS][TIME_SLOTS];
 
 
@@ -68,9 +90,7 @@ public class Assign {
             }
         }
         if (y == BREAK_1 + 1 || y == BREAK_2 + 1) {
-            if ((table[x][y - 1] != null && subjects[z].equals(table[x][y - 1]))) {
-                return true;
-            }
+            return table[x][y - 1] != null && subjects[z].equals(table[x][y - 1]);
         }
         return false;
     }
@@ -80,11 +100,11 @@ public class Assign {
         int y = position[1];
         int z = position[2];
 
-        if (y == 0 || y == 2 || y == BREAK_1 + 1 || y == BREAK_2 + 1||y==TIME_SLOTS-2) {
+        if (y == 0 || y == 2 || y == BREAK_1 + 1 || y == BREAK_2 + 1 || y == TIME_SLOTS - 2) {
             table[x][y + 1] = subjects[z];
         }
 
-        if (y == 1 || y == BREAK_1 || y == BREAK_2 || y == TIME_SLOTS-1) {
+        if (y == 1 || y == BREAK_1 || y == BREAK_2 || y == TIME_SLOTS - 1) {
             table[x][y - 1] = subjects[z];
         }
 
@@ -103,11 +123,6 @@ public class Assign {
 
     }
 
-
-    public static void main(String[] args) {
-        var timetable = createTimetable();
-        printTimetable(timetable);
-    }
 
     public static boolean subjectCantBeAfterBreak(String subject, int abreak, int[] position) {
         if (abreak == 2) {
@@ -137,10 +152,76 @@ public class Assign {
 
 
     //setting the number of periods of a subjects
-    public static void getPeriodNumber(String subject,int maxNumber){
+    public static void getPeriodNumber(String subject, int maxNumber) {
 //numberOfPeriods
     }
-}
 
+
+    public void assignTimeSlot(Stream stream) {
+        List<Lesson> lessons = lessonRepository.findAllById_Stream(stream);
+        List<Timeslot> timeslots = timeslotRepository.findAll();
+        while (streamHasMoreHours(stream)) {
+            int selectedLessonId = rd.nextInt(lessons.size());
+            int selectedTimeslot = rd.nextInt(timeslots.size());
+            if (
+                    hasNoMoreHours(lessons.get(selectedLessonId))
+                            ||
+                            isOverLap(
+                                    lessons.get(selectedLessonId),
+                                    timeslots.get(selectedTimeslot).getId().getStartTime(),
+                                    timeslots.get(selectedTimeslot).getId().getEndTime(),
+                                    timeslots.get(selectedTimeslot).getId().getDay()
+                            )
+            ) {
+                continue;
+            }
+
+            timeslots.get(selectedTimeslot).getLessons().add(lessons.get(selectedLessonId));
+timeslotRepository.saveAndFlush(timeslots.get(selectedTimeslot));
+        }
+
+
+    }
+
+    public boolean isOverLap(Lesson lesson, LocalTime startTime, LocalTime endTime, DayOfWeek day) {
+        Timeslot timeslots = timeslotRepository.findAllById_DayAndId_StartTimeAndId_EndTime(
+                day, startTime, endTime
+        ).orElseThrow();
+
+        return timeslots.getLessons().stream()
+                .anyMatch(
+                        les -> les.getId().getTeacher() == lesson.getId().getTeacher()
+                );
+    }
+
+
+    public boolean hasNoMoreHours(Lesson lesson) {
+        Set<Timeslot> timeslots = lesson.getTimeslots();
+        long sum = 0;
+        for (Timeslot timeslot : timeslots) {
+            sum = sum + timeslot.getId().getStartTime()
+                    .until(timeslot.getId().getEndTime(), ChronoUnit.HOURS);
+        }
+        return sum >= lesson.getHoursPerWeek();
+    }
+
+    public boolean streamHasMoreHours(Stream stream) {
+        List<Lesson> lessons = lessonRepository.findAllById_Stream(stream);
+        boolean hasMore = false;
+        for (Lesson lesson : lessons) {
+            if (!hasNoMoreHours(lesson)) {
+                hasMore = true;
+                break;
+            }
+        }
+        return hasMore;
+    }
+
+
+    public static void main(String[] args) {
+        var timetable = generateTimeslot();
+        printTimetable(timetable);
+    }
+}
 
 
