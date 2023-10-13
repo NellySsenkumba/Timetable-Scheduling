@@ -29,7 +29,7 @@ public class Teacher {
     private LocalDate dateOfBirth;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime registeredOn;
-
+    //TODO: add gender remove status
     private String status;
 
 

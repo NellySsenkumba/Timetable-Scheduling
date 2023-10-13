@@ -1,5 +1,6 @@
 package org.school.timetableschedulingsystem.models.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class Lesson {
     private LessonCompositePrimaryKey id;
     private int hoursPerWeek;
 
-    @ManyToMany(mappedBy = "lessons")
-    Set<Timeslot> timeslots;
+//    @ManyToMany(mappedBy = "lessons")
+//    @JsonIgnore
+//    Set<Timeslot> timeslots;
 }

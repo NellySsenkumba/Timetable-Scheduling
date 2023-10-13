@@ -19,6 +19,7 @@ public class TimeslotRequestHandler extends RequestHandler {
                 return timeslotService.getTimeslot();
             case "assign-lesson":
                 return timeslotService.assign();
+
             default:
                 return this.nextRequestHandler.handleRequest(clientRequest);
         }

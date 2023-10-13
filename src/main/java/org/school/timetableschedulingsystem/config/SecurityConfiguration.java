@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         http -> http
-                                .requestMatchers("/api/v1/")
+                                .requestMatchers("/api/v1/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/login/")
                                 .permitAll()
@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exp -> exp.authenticationEntryPoint(authenticationEntryPoint))
+
         ;
 
         return httpSecurity.build();

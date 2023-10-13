@@ -33,9 +33,6 @@ public class Assign {
     static Random rd = new Random();
 
 
-    static Map<String, Integer> numberOfPeriods = new HashMap<>();
-
-
     //generate timeslot
     public static String[][] generateTimeslot() {
         String[][] table = new String[DAYS][TIME_SLOTS];
@@ -157,71 +154,63 @@ public class Assign {
     }
 
 
-    public void assignTimeSlot(Stream stream) {
-        List<Lesson> lessons = lessonRepository.findAllById_Stream(stream);
-        List<Timeslot> timeslots = timeslotRepository.findAll();
-        while (streamHasMoreHours(stream)) {
-            int selectedLessonId = rd.nextInt(lessons.size());
-            int selectedTimeslot = rd.nextInt(timeslots.size());
-            if (
-                    hasNoMoreHours(lessons.get(selectedLessonId))
-                            ||
-                            isOverLap(
-                                    lessons.get(selectedLessonId),
-                                    timeslots.get(selectedTimeslot).getId().getStartTime(),
-                                    timeslots.get(selectedTimeslot).getId().getEndTime(),
-                                    timeslots.get(selectedTimeslot).getId().getDay()
-                            )
-            ) {
-                continue;
-            }
+    public void assignTimeSlot2(Stream stream) {
+        List<Lesson> lessons;
 
-            timeslots.get(selectedTimeslot).getLessons().add(lessons.get(selectedLessonId));
-timeslotRepository.saveAndFlush(timeslots.get(selectedTimeslot));
+        while (!(lessons = this.lessonsWithMoreTime(stream)).isEmpty()) {
+
+            for (Lesson lesson : lessons) {
+                List<Timeslot> timeslots = this.freeTimeslots(stream);
+                if (timeslots.isEmpty()) {
+                    return;
+                }
+                int selectedTimeslot = rd.nextInt(timeslots.size());
+                if (isOverLap(lesson, timeslots.get(selectedTimeslot))) {
+                    break;
+                }
+                // TODO:bidirectional
+                timeslots.get(selectedTimeslot).getLessons().add(lesson);
+                timeslotRepository.saveAndFlush(timeslots.get(selectedTimeslot));
+                break;
+            }
         }
 
 
     }
 
-    public boolean isOverLap(Lesson lesson, LocalTime startTime, LocalTime endTime, DayOfWeek day) {
-        Timeslot timeslots = timeslotRepository.findAllById_DayAndId_StartTimeAndId_EndTime(
-                day, startTime, endTime
-        ).orElseThrow();
-
-        return timeslots.getLessons().stream()
+    private boolean isOverLap(Lesson lesson, Timeslot timeslot) {
+        return timeslot.getLessons().stream()
                 .anyMatch(
                         les -> les.getId().getTeacher() == lesson.getId().getTeacher()
                 );
     }
 
 
-    public boolean hasNoMoreHours(Lesson lesson) {
-        Set<Timeslot> timeslots = lesson.getTimeslots();
+    private boolean hasMoreHours(Lesson lesson) {
+        List<Timeslot> timeslots = timeslotRepository.findAllByLessons(lesson);
         long sum = 0;
         for (Timeslot timeslot : timeslots) {
             sum = sum + timeslot.getId().getStartTime()
                     .until(timeslot.getId().getEndTime(), ChronoUnit.HOURS);
         }
-        return sum >= lesson.getHoursPerWeek();
+        return sum < lesson.getHoursPerWeek();
     }
 
-    public boolean streamHasMoreHours(Stream stream) {
-        List<Lesson> lessons = lessonRepository.findAllById_Stream(stream);
-        boolean hasMore = false;
-        for (Lesson lesson : lessons) {
-            if (!hasNoMoreHours(lesson)) {
-                hasMore = true;
-                break;
-            }
-        }
-        return hasMore;
+    private List<Lesson> lessonsWithMoreTime(Stream stream) {
+        List<Lesson> allLessons = lessonRepository.findAllById_Stream(stream);
+        return allLessons.stream().filter(this::hasMoreHours).toList();
     }
 
 
-    public static void main(String[] args) {
-        var timetable = generateTimeslot();
-        printTimetable(timetable);
+    private List<Timeslot> freeTimeslots(Stream stream) {
+        List<Timeslot> timeslots = timeslotRepository.findAll();
+        return timeslots.stream().filter(
+                timeslot -> timeslot.getLessons().stream().noneMatch(
+                        lesson -> lesson.getId().getStream() == stream
+                )
+        ).toList();
+
     }
+
 }
-
 

@@ -57,8 +57,12 @@ public class TimeslotServiceImp implements TimeslotService {
 
     @Override
     public String assign() {
-        List<Stream> streams =streamRepository.findAll();
-        streams.forEach(assign::assignTimeSlot);
-         return "Done";
+        List<Stream> streams = streamRepository.findAll();
+        List<Timeslot> timeslots = timeslotRepository.findAll();
+        timeslotRepository.saveAll(timeslots.stream()
+                .peek(timeslot -> timeslot.getLessons().clear())
+                .toList());
+        streams.forEach(assign::assignTimeSlot2);
+        return "Timetable has been generated";
     }
 }
