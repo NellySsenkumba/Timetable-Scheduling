@@ -25,12 +25,13 @@ public class Teacher {
     private String middleName;
     @Column(unique = true)
     private String email;
-    private int phoneNumber;
+    @Column(columnDefinition = "int10")
+    private long phoneNumber;
     private LocalDate dateOfBirth;
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime registeredOn;
     //TODO: add gender remove status
-    private String status;
+
 
 
 }

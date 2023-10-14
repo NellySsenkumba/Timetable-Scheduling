@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ExceptionResponse> wrongCredentials() {
+    public ResponseEntity<ExceptionResponse> handleWrongCredentials() {
         return new ResponseEntity<>(
                 new ExceptionResponse(
                         "Bad Credentials",
@@ -18,6 +18,18 @@ public class ExceptionHandler {
                 HttpStatus.UNAUTHORIZED
         );
 
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ExceptionResponse> handleNullPointerException(NullPointerException exception) {
+        return new ResponseEntity<>(
+                new ExceptionResponse(
+                        "Null Pointer Exception",
+                        "Request body is required for this request"
+
+                ),
+                HttpStatus.NOT_ACCEPTABLE
+        );
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)

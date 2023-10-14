@@ -7,9 +7,11 @@ public record ExceptionResponse(
         String status,
         String message,
         String exception,
+
+
         Timestamp timestamp
 ) {
-    public ExceptionResponse(String status, String message) {
-        this("-1", status, message, new Timestamp(System.currentTimeMillis()));
+    public ExceptionResponse(String message, String exception) {
+        this("-1", message, exception, new Timestamp(System.currentTimeMillis()));
     }
 }
