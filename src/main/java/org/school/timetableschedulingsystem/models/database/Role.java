@@ -11,8 +11,8 @@ import java.util.Set;
 @Data
 public class Role {
     @Id
-    private Long id;
     private String code;
+    @Column(nullable = false)
     private String name;
     private String description;
     @Enumerated(EnumType.STRING)

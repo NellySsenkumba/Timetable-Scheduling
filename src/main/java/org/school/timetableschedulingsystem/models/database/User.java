@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("user")
+@DiscriminatorValue("U")
 public class User extends Teacher implements UserDetails {
     @Column(unique = true)
     private String username;

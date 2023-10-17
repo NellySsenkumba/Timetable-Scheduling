@@ -19,13 +19,16 @@ public class Stream {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToOne
+    @JoinColumn(nullable = false)
     private Teacher classTeacher;
 
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User updatedBy;
 
 }

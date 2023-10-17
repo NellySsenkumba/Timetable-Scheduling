@@ -19,9 +19,10 @@ import java.util.Set;
 public class Lesson {
     @EmbeddedId
     private LessonCompositePrimaryKey id;
+
+    @Column(nullable = false)
     private int hoursPerWeek;
 
-//    @ManyToMany(mappedBy = "lessons")
-//    @JsonIgnore
-//    Set<Timeslot> timeslots;
+    @ManyToMany(mappedBy = "lessons")
+    Set<Timeslot> timeslots;
 }

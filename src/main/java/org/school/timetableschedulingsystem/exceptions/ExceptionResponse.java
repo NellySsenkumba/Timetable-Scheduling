@@ -7,8 +7,6 @@ public record ExceptionResponse(
         String status,
         String message,
         String exception,
-
-
         Timestamp timestamp
 ) {
     public ExceptionResponse(String message, String exception) {
