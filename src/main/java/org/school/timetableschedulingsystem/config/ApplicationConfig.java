@@ -21,13 +21,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -61,6 +62,38 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.addAllowedOrigin("*");
+//        config.addAllowedMethod("GET");
+//        config.addAllowedMethod("POST");
+//        config.addAllowedMethod("PUT");
+//        config.addAllowedMethod("DELETE");
+//        config.addAllowedHeader("*");
+////        config.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return source;
+//
+//    }
+
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        return request -> {
+//            CorsConfiguration config = new CorsConfiguration();
+//            config.addAllowedOrigin("*");
+//            config.addAllowedMethod("GET");
+//            config.addAllowedMethod("POST");
+//            config.addAllowedMethod("PUT");
+//            config.addAllowedMethod("DELETE");
+//            config.addAllowedHeader("*");
+//            config.setAllowCredentials(true);
+//            return config;
+//        };
+//    }
+
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -86,6 +119,7 @@ public class ApplicationConfig {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
+
             PrintWriter out = response.getWriter();
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -96,6 +130,21 @@ public class ApplicationConfig {
         };
     }
 
+
+    /*@Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
+    }*/
 
     @Bean
     public CorsFilter corsFilter() {
@@ -110,4 +159,6 @@ public class ApplicationConfig {
         return new CorsFilter(source);
     }
 
+
 }
+

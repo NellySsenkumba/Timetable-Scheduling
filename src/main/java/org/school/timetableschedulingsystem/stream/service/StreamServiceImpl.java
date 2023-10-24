@@ -7,6 +7,7 @@ import org.school.timetableschedulingsystem.models.database.Stream;
 import org.school.timetableschedulingsystem.stream.StreamRepository;
 import org.school.timetableschedulingsystem.stream.dto.AddStreamRequest;
 import org.school.timetableschedulingsystem.stream.dto.AddStreamResponse;
+import org.school.timetableschedulingsystem.stream.dto.StreamResponse;
 import org.school.timetableschedulingsystem.stream.mapper.StreamResponseMapper;
 import org.school.timetableschedulingsystem.teacher.TeacherRepository;
 import org.school.timetableschedulingsystem.utils.CustomUtils;
@@ -14,11 +15,12 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class StreamServiceImpl {
+public class StreamServiceImpl implements StreamService{
     private final TeacherRepository teacherRepository;
     private final StreamRepository streamRepository;
 
@@ -40,6 +42,12 @@ public class StreamServiceImpl {
                 )
                 .build();
         return StreamResponseMapper.mapToResponse(streamRepository.saveAndFlush(stream));
+    }
+
+    @Override
+    public Collection<StreamResponse> allStreams() {
+        return streamRepository.findAll().stream()
+                .map(StreamResponseMapper::mapToStreamResponse).toList();
     }
 
 }

@@ -16,6 +16,9 @@ public class StreamRequestHandler extends RequestHandler {
             case "add-stream":{
                 return streamService.addStream(clientRequest);
             }
+            case "all-streams":{
+                return streamService.allStreams();
+            }
 
             default:
                 return nextRequestHandler.handleRequest(clientRequest);

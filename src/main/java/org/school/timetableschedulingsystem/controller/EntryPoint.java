@@ -5,10 +5,7 @@ import org.school.timetableschedulingsystem.handler.TeacherRequestHandler;
 import org.school.timetableschedulingsystem.scheduler.TimetableGenerator;
 import org.springframework.http.*;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/v1/")
@@ -27,14 +24,14 @@ public class EntryPoint {
 
     @RequestMapping("generate-pdf")
     public ResponseEntity<byte[]> generatePdf() {
-        var bytes= timetableGenerator.generatePdf();
+        var bytes = timetableGenerator.generatePdf();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDisposition(ContentDisposition.builder("attachment")
                 .filename("timetable.pdf")
                 .build());
-        return new ResponseEntity<>(bytes.toByteArray(),headers, HttpStatus.OK);
+        return new ResponseEntity<>(bytes.toByteArray(), headers, HttpStatus.OK);
     }
 
 }

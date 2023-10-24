@@ -28,7 +28,7 @@ public class Stream {
 
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = true)
     private User updatedBy;
 
 }
