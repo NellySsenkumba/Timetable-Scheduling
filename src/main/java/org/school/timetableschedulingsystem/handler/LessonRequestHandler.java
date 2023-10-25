@@ -17,6 +17,8 @@ public class LessonRequestHandler extends RequestHandler {
         switch (clientRequest.action()) {
             case "add-lesson":
                 return lessonService.addLesson(clientRequest);
+            case "all-lessons":
+                return this.lessonService.allLessons();
             default:
                 return nextRequestHandler.handleRequest(clientRequest);
         }

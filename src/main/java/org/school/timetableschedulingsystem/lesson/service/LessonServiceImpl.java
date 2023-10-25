@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 @Service
@@ -32,7 +33,7 @@ public class LessonServiceImpl implements LessonService {
     public AssignLessonResponseDto addLesson(ClientRequest clientRequest) {
         Map<String, Object> data = clientRequest.data();
         Field[] fields = LessonAssignmentDto.class.getDeclaredFields();
-         if (!Arrays.stream(fields).map(Field::getName).allMatch(data::containsKey)) {
+        if (!Arrays.stream(fields).map(Field::getName).allMatch(data::containsKey)) {
             throw new MissingFieldsException();
         }
         CustomUtils.convertStringToLong(data.get("subjectId"));
@@ -63,5 +64,11 @@ public class LessonServiceImpl implements LessonService {
                 )
                 .build();
         return AssignLessonDtoMapper.mapToDto(lessonRepository.saveAndFlush(lesson));
+    }
+
+    @Override
+    public Collection<AssignLessonResponseDto> allLessons() {
+        return lessonRepository.findAll().stream()
+                .map(AssignLessonDtoMapper::mapToDto).toList();
     }
 }
