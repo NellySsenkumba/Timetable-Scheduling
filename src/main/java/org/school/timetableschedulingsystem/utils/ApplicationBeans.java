@@ -9,6 +9,6 @@ import java.time.format.DateTimeFormatter;
 public class ApplicationBeans {
     @Bean
     public DateTimeFormatter formatter() {
-        return DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
 }

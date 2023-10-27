@@ -33,6 +33,10 @@ public class TeacherService {
         if (!requiredFields.stream().allMatch(data::containsKey)) {
             throw new MissingFieldsException();
         }
+        //Todo:try this
+        var test = Arrays.stream(fields).map(Field::getName).allMatch(data::containsKey);
+        System.getLogger("test").log(System.Logger.Level.INFO, test);
+
 
         String dateString = (String) data.get("dateOfBirth");
         LocalDate date = LocalDate.parse(dateString, formatter);
