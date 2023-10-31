@@ -14,6 +14,7 @@ public class RequestHandlerSetter {
     private final LastRequestHandler lastRequestHandler;
     private final StreamRequestHandler streamRequestHandler;
     private final TimeslotRequestHandler timeslotRequestHandler;
+    private final TimetableRequestHandler timetableRequestHandler;
 
     @Bean
     public void setOrder() {
@@ -21,7 +22,8 @@ public class RequestHandlerSetter {
         subjectRequestHandler.setNextRequestHandler(lessonRequestHandler);
         lessonRequestHandler.setNextRequestHandler(streamRequestHandler);
         streamRequestHandler.setNextRequestHandler(timeslotRequestHandler);
-        timeslotRequestHandler.setNextRequestHandler(lastRequestHandler);
+        timeslotRequestHandler.setNextRequestHandler(timetableRequestHandler);
+        timetableRequestHandler.setNextRequestHandler(lastRequestHandler);
 
     }
 }

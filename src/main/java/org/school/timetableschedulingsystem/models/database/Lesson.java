@@ -1,6 +1,5 @@
 package org.school.timetableschedulingsystem.models.database;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-//@Table(uniqueConstraints = @UniqueConstraint(name="teacher_stream_subject_unique_key",columnNames = {"teacher_id","stream_id","subject_id"}))
 public class Lesson {
     @EmbeddedId
     private LessonCompositePrimaryKey id;
@@ -23,6 +21,5 @@ public class Lesson {
     @Column(nullable = false)
     private int hoursPerWeek;
 
-    @ManyToMany(mappedBy = "lessons")
-    Set<Timeslot> timeslots;
+
 }

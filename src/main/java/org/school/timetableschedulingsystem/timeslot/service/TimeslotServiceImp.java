@@ -3,6 +3,7 @@ package org.school.timetableschedulingsystem.timeslot.service;
 import lombok.RequiredArgsConstructor;
 import org.school.timetableschedulingsystem.controller.ClientRequest;
 import org.school.timetableschedulingsystem.exceptions.MissingFieldsException;
+import org.school.timetableschedulingsystem.lesson.repository.LessonRepository;
 import org.school.timetableschedulingsystem.models.database.Stream;
 import org.school.timetableschedulingsystem.models.database.Timeslot;
 import org.school.timetableschedulingsystem.models.database.keys.TimeslotCompositePrimaryKey;
@@ -27,6 +28,7 @@ public class TimeslotServiceImp implements TimeslotService {
     private final TimeslotRepository timeslotRepository;
     private final StreamRepository streamRepository;
     private final Assign assign;
+    private final LessonRepository lessonRepository;
 
     public TimeslotResponse addTimeslot(ClientRequest clientRequest) {
         Map<String, Object> data = clientRequest.data();
@@ -60,8 +62,10 @@ public class TimeslotServiceImp implements TimeslotService {
         List<Stream> streams = streamRepository.findAll();
         List<Timeslot> timeslots = timeslotRepository.findAll();
         timeslotRepository.saveAll(timeslots.stream()
-                .peek(timeslot -> timeslot.getLessons().clear())
+                .peek(timeslot ->
+                        timeslot.getLessons().clear())
                 .toList());
+
         streams.forEach(assign::assignTimeSlot2);
         return "Timetable has been generated";
     }

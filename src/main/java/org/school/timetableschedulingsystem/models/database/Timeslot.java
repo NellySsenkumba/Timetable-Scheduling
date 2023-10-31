@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.school.timetableschedulingsystem.models.database.keys.TimeslotCompositePrimaryKey;
 
 import java.time.DayOfWeek;
@@ -23,7 +25,10 @@ public class Timeslot {
     @EmbeddedId
     private TimeslotCompositePrimaryKey id;
 
-    @ManyToMany
+    @ManyToMany(
+            cascade = jakarta.persistence.CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
     private Set<Lesson> lessons;
 
 }

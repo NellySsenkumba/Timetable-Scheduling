@@ -33,50 +33,6 @@ public class Assign {
     static Random rd = new Random();
 
 
-    //generate timeslot
-    public static String[][] generateTimeslot() {
-        String[][] table = new String[DAYS][TIME_SLOTS];
-
-
-        //4 lessons cant go consecutive
-        //[x][1]-[][2]-[][3]-[][4] not allowed
-
-        while (Arrays.stream(table).flatMap(Arrays::stream).anyMatch(Objects::isNull)) {
-            int[] position = {
-                    rd.nextInt(DAYS),
-                    rd.nextInt(TIME_SLOTS),
-                    rd.nextInt(subjects.length)};
-
-            if (
-                    table[position[0]][position[1]] != null && isAfterOrBeforeBreak(table, position)
-            ) {
-                continue;
-            }
-
-            if (subjectCantBeAfterBreak("Mat", 2, position)) {
-                continue;
-            }
-
-
-            //making sure we don't have 4 consecutive
-
-            if (position[1] != 0 && position[1] != TIME_SLOTS - 1 && table[position[0]][position[1] + 1] != null && table[position[0]][position[1] - 1] != null)
-                if (subjects[position[2]].equals(table[position[0]][position[1] + 1]) || subjects[position[2]].equals(table[position[0]][position[1] - 1])) {
-                    continue;
-                }
-
-
-            table[position[0]][position[1]] = subjects[position[2]];
-
-            //setting double
-            setDouble(table, position);
-
-        }
-        return table;
-
-    }
-
-
     public static boolean isAfterOrBeforeBreak(String[][] table, int[] position) {
         int x = position[0];
         int y = position[1];
@@ -121,56 +77,22 @@ public class Assign {
     }
 
 
-    public static boolean subjectCantBeAfterBreak(String subject, int abreak, int[] position) {
-        if (abreak == 2) {
-            abreak = BREAK_2;
-        } else abreak = BREAK_1;
-        return subjects[position[2]].equals(subject) && position[1] > abreak;
-    }
-
-
-    //lesson in a bracket  cant appear in with spaces
-    public static boolean repeated(String[][] table, int[] position) {
-        int location;
-        if (position[1] <= BREAK_1) {
-            location = BREAK_1;
-
-
-        } else if (position[1] <= BREAK_2) {
-            location = BREAK_2;
-
-        } else {
-            location = TIME_SLOTS;
-        }
-
-
-        return false;
-    }
-
-
-    //setting the number of periods of a subjects
-    public static void getPeriodNumber(String subject, int maxNumber) {
-//numberOfPeriods
-    }
-
-
     public void assignTimeSlot2(Stream stream) {
         List<Lesson> lessons;
+        List<Timeslot> timeslots;
 
-        while (!(lessons = this.lessonsWithMoreTime(stream)).isEmpty()) {
-
+        while (!(lessons = this.lessonsWithMoreTime(stream)).isEmpty() && !(timeslots = this.freeTimeslots(stream)).isEmpty()) {
             for (Lesson lesson : lessons) {
-                List<Timeslot> timeslots = this.freeTimeslots(stream);
-                if (timeslots.isEmpty()) {
-                    return;
-                }
                 int selectedTimeslot = rd.nextInt(timeslots.size());
                 if (isOverLap(lesson, timeslots.get(selectedTimeslot))) {
-                    break;
+                    continue;
                 }
                 // TODO:bidirectional
+//                lesson.getTimeslots().add(timeslots.get(selectedTimeslot));
+
                 timeslots.get(selectedTimeslot).getLessons().add(lesson);
-                timeslotRepository.saveAndFlush(timeslots.get(selectedTimeslot));
+                timeslotRepository.save(timeslots.get(selectedTimeslot));
+
                 break;
             }
         }
@@ -187,7 +109,7 @@ public class Assign {
 
 
     private boolean hasMoreHours(Lesson lesson) {
-        List<Timeslot> timeslots = timeslotRepository.findAllByLessons(lesson);
+        List<Timeslot> timeslots = timeslotRepository.findAllByLessonsContaining(lesson);
         long sum = 0;
         for (Timeslot timeslot : timeslots) {
             sum = sum + timeslot.getId().getStartTime()
