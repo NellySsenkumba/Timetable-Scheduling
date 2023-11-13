@@ -10,4 +10,8 @@ public interface LessonService {
     AssignLessonResponseDto addLesson(ClientRequest clientRequest);
 
     Collection<AssignLessonResponseDto> allLessons();
+
+    AssignLessonResponseDto updateLesson(ClientRequest clientRequest);
+
+    String deleteLesson(ClientRequest clientRequest);
 }

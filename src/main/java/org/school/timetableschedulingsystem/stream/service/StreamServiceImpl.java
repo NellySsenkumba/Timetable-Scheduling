@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class StreamServiceImpl implements StreamService{
+public class StreamServiceImpl implements StreamService {
     private final TeacherRepository teacherRepository;
     private final StreamRepository streamRepository;
 
@@ -48,6 +48,47 @@ public class StreamServiceImpl implements StreamService{
     public Collection<StreamResponse> allStreams() {
         return streamRepository.findAll().stream()
                 .map(StreamResponseMapper::mapToStreamResponse).toList();
+    }
+
+    @Override
+    public AddStreamResponse updateStream(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long streamId = CustomUtils.convertStringToLong(data.get("id"));
+
+        Stream stream = streamRepository.findById(streamId).orElseThrow(
+                () -> new IllegalArgumentException("Stream does not exist")
+        );
+        if (data.containsKey("name")) {
+            stream.setName((String) data.get("name"));
+        }
+        if (data.containsKey("class_teacher_id")) {
+            stream.setClassTeacher(
+                    teacherRepository.findById(
+                            CustomUtils.convertStringToLong(data.get("class_teacher_id"))
+                    ).orElseThrow(() ->
+                            new IllegalArgumentException("Teacher does not exist")
+                    )
+            );
+        }
+        stream=streamRepository.saveAndFlush(stream);
+        return new AddStreamResponse(stream.getName(), stream.getClassTeacher().getFirstName() + " " + stream.getClassTeacher().getLastName());
+    }
+
+    @Override
+    public String deleteStream(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long streamId = CustomUtils.convertStringToLong(data.get("id"));
+        if (!streamRepository.existsById(streamId)) {
+            throw new IllegalArgumentException("Stream does not exist");
+        }
+        streamRepository.deleteById(streamId);
+        return "Stream has been deleted";
     }
 
 }

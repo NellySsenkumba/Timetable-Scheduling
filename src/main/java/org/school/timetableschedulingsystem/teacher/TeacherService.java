@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.school.timetableschedulingsystem.controller.ClientRequest;
 import org.school.timetableschedulingsystem.exceptions.MissingFieldsException;
 import org.school.timetableschedulingsystem.models.database.Teacher;
+import org.school.timetableschedulingsystem.models.enums.Gender;
 import org.school.timetableschedulingsystem.teacher.dto.AddTeacherDto;
+import org.school.timetableschedulingsystem.teacher.dto.TeacherResponseDto;
+import org.school.timetableschedulingsystem.utils.CustomUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -21,11 +24,14 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final DateTimeFormatter formatter;
 
-    public List<Teacher> allTeachers() {
-        return teacherRepository.findAll();
+    public List<TeacherResponseDto> allTeachers() {
+        return teacherRepository.findAll().stream().map(
+                TeacherResponseDto::fromTeacher
+        ).toList(
+        );
     }
 
-    public Teacher addTeacher(ClientRequest request) {
+    public TeacherResponseDto addTeacher(ClientRequest request) {
         Map<String, Object> data = request.data();
         Field[] fields = AddTeacherDto.class.getDeclaredFields();
         List<String> requiredFields = Arrays.stream(fields).map(Field::getName).toList();
@@ -48,9 +54,56 @@ public class TeacherService {
                 .middleName((String) data.get("middleName"))
                 .email((String) data.get("email"))
                 .phoneNumber((int) data.get("phoneNumber"))
+                .gender(Gender.valueOf((String) data.get("gender")))
                 .dateOfBirth(date)
                 .build();
 
-        return teacherRepository.saveAndFlush(teacher);
+        return TeacherResponseDto.fromTeacher(teacherRepository.saveAndFlush(teacher));
+    }
+
+    public TeacherResponseDto updateTeacher(ClientRequest request) {
+        Map<String, Object> data = request.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long teacherId = CustomUtils.convertStringToLong(data.get("id"));
+
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(
+                () -> new IllegalArgumentException("Teacher does not exist")
+        );
+        if (data.containsKey("firstName")) {
+            teacher.setFirstName((String) data.get("firstName"));
+        }
+        if (data.containsKey("lastName")) {
+            teacher.setLastName((String) data.get("lastName"));
+        }
+        if (data.containsKey("middleName")) {
+            teacher.setMiddleName((String) data.get("middleName"));
+        }
+        if (data.containsKey("email")) {
+            teacher.setEmail((String) data.get("email"));
+        }
+        if (data.containsKey("phoneNumber")) {
+            teacher.setPhoneNumber((int) data.get("phoneNumber"));
+        }
+        if (data.containsKey("dateOfBirth")) {
+            String dateString = (String) data.get("dateOfBirth");
+            LocalDate date = LocalDate.parse(dateString, formatter);
+            teacher.setDateOfBirth(date);
+        }
+        return TeacherResponseDto.fromTeacher(teacherRepository.saveAndFlush(teacher));
+    }
+
+    public String deleteTeacher(ClientRequest request) {
+        Map<String, Object> data = request.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long teacherId = CustomUtils.convertStringToLong(data.get("id"));
+        if (!teacherRepository.existsById(teacherId)) {
+            throw new IllegalArgumentException("Teacher does not exist");
+        }
+        teacherRepository.deleteById(teacherId);
+        return "Teacher Deleted";
     }
 }

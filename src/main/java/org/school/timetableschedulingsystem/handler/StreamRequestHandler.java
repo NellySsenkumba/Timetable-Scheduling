@@ -10,14 +10,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StreamRequestHandler extends RequestHandler {
     private final StreamServiceImpl streamService;
+
     @Override
     Object handleRequest(ClientRequest clientRequest) {
         switch (clientRequest.action()) {
-            case "add-stream":{
+            case "add-stream": {
                 return streamService.addStream(clientRequest);
             }
-            case "all-streams":{
+            case "all-streams": {
                 return streamService.allStreams();
+            }
+            case "update-stream": {
+                return streamService.updateStream(clientRequest);
+            }
+            case "delete-stream": {
+                return streamService.deleteStream(clientRequest);
             }
 
             default:

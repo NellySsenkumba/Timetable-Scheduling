@@ -3,6 +3,7 @@ package org.school.timetableschedulingsystem.timeslot.service;
 import lombok.RequiredArgsConstructor;
 import org.school.timetableschedulingsystem.controller.ClientRequest;
 import org.school.timetableschedulingsystem.exceptions.MissingFieldsException;
+import org.school.timetableschedulingsystem.exceptions.NotFoundException;
 import org.school.timetableschedulingsystem.lesson.repository.LessonRepository;
 import org.school.timetableschedulingsystem.models.database.Stream;
 import org.school.timetableschedulingsystem.models.database.Timeslot;
@@ -13,6 +14,7 @@ import org.school.timetableschedulingsystem.timeslot.TimeslotRepository;
 import org.school.timetableschedulingsystem.timeslot.dto.AddTimeslotDto;
 import org.school.timetableschedulingsystem.timeslot.dto.TimeslotResponse;
 import org.school.timetableschedulingsystem.timeslot.mapper.TimeslotResponseMapper;
+import org.school.timetableschedulingsystem.utils.CustomUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -55,6 +57,42 @@ public class TimeslotServiceImp implements TimeslotService {
                 .toList()
                 ;
 
+    }
+
+    @Override
+    public TimeslotResponse updateTimeslot(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("startTime") || !data.containsKey("endTime") || !data.containsKey("day")) {
+            throw new MissingFieldsException();
+        }
+        LocalTime startTime = (LocalTime) data.get("startTime");
+        LocalTime endTime = (LocalTime) data.get("endTime");
+        DayOfWeek day = (DayOfWeek) data.get("day");
+        Timeslot timeslot = timeslotRepository.findById(new TimeslotCompositePrimaryKey(
+                startTime,
+                endTime,
+                day
+        )).orElseThrow(() -> new NotFoundException("Timeslot not found"));
+
+        return null;
+    }
+
+    @Override
+    public String deleteTimeslot(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("startTime") || !data.containsKey("endTime") || !data.containsKey("day")) {
+            throw new MissingFieldsException();
+        }
+        LocalTime startTime = (LocalTime) data.get("startTime");
+        LocalTime endTime = (LocalTime) data.get("endTime");
+        DayOfWeek day = (DayOfWeek) data.get("day");
+        Timeslot timeslot = timeslotRepository.findById(new TimeslotCompositePrimaryKey(
+                startTime,
+                endTime,
+                day
+        )).orElseThrow(() -> new NotFoundException("Timeslot not found"));
+        timeslotRepository.delete(timeslot);
+        return "deleted timeslot";
     }
 
     @Override

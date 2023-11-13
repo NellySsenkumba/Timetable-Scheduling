@@ -8,6 +8,9 @@ import java.util.List;
 public interface TimeslotService {
     TimeslotResponse addTimeslot(ClientRequest clientRequest);
     List<TimeslotResponse> getTimeslot();
+    TimeslotResponse updateTimeslot(ClientRequest clientRequest);
+
+    String deleteTimeslot(ClientRequest clientRequest);
 
     String assign();
 

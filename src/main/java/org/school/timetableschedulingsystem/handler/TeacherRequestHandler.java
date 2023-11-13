@@ -21,6 +21,9 @@ public class TeacherRequestHandler extends RequestHandler {
             case "all-teacher": {
                 return teacherService.allTeachers();
             }
+            case "update-teacher": {
+                return teacherService.updateTeacher(request);
+            }
 
             default: {
                 return nextRequestHandler.handleRequest(request);

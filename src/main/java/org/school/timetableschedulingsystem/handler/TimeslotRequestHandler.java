@@ -17,6 +17,8 @@ public class TimeslotRequestHandler extends RequestHandler {
                 return timeslotService.addTimeslot(clientRequest);
             case "all-timeslot":
                 return timeslotService.getTimeslot();
+            case "delete-timeslot":
+                return timeslotService.deleteTimeslot(clientRequest);
             case "assign-lesson":
                 return timeslotService.assign();
 

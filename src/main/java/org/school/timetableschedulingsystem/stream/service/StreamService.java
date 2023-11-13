@@ -12,5 +12,10 @@ public interface StreamService {
     AddStreamResponse addStream(ClientRequest clientRequest);
     Collection<StreamResponse> allStreams();
 
+    AddStreamResponse updateStream(ClientRequest clientRequest);
+
+    String deleteStream(ClientRequest clientRequest);
+
+
 }
 

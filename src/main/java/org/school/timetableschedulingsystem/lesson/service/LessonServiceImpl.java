@@ -71,4 +71,60 @@ public class LessonServiceImpl implements LessonService {
         return lessonRepository.findAll().stream()
                 .map(AssignLessonDtoMapper::mapToDto).toList();
     }
+
+    @Override
+    public AssignLessonResponseDto updateLesson(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("teacherId") || !data.containsKey("subjectId") || !data.containsKey("streamId")) {
+            throw new MissingFieldsException();
+        }
+        long teacherId = CustomUtils.convertStringToLong(data.get("teacherId"));
+        long subjectId = CustomUtils.convertStringToLong(data.get("subjectId"));
+        long streamId = CustomUtils.convertStringToLong(data.get("streamId"));
+        Lesson lesson = lessonRepository.findById(new LessonCompositePrimaryKey(
+                teacherRepository.findById(teacherId).orElseThrow(
+                        () -> new IllegalArgumentException("Teacher does not exist")
+                ),
+                streamRepository.findById(streamId).orElseThrow(
+                        () -> new IllegalArgumentException("Stream does not exist")
+                ),
+                subjectRepository.findById(subjectId).orElseThrow(
+                        () -> new IllegalArgumentException("Subject does not exist")
+                )
+        )).orElseThrow(
+                () -> new IllegalArgumentException("Lesson does not exist")
+        );
+
+        if (data.containsKey("hoursPerWeek")) {
+            lesson.setHoursPerWeek((int) data.get("hoursPerWeek"));
+        }
+        return AssignLessonDtoMapper.mapToDto(lessonRepository.saveAndFlush(lesson));
+
+    }
+
+    @Override
+    public String deleteLesson(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("teacherId") || !data.containsKey("subjectId") || !data.containsKey("streamId")) {
+            throw new MissingFieldsException();
+        }
+        long teacherId = CustomUtils.convertStringToLong(data.get("teacherId"));
+        long subjectId = CustomUtils.convertStringToLong(data.get("subjectId"));
+        long streamId = CustomUtils.convertStringToLong(data.get("streamId"));
+        Lesson lesson = lessonRepository.findById(new LessonCompositePrimaryKey(
+                teacherRepository.findById(teacherId).orElseThrow(
+                        () -> new IllegalArgumentException("Teacher does not exist")
+                ),
+                streamRepository.findById(streamId).orElseThrow(
+                        () -> new IllegalArgumentException("Stream does not exist")
+                ),
+                subjectRepository.findById(subjectId).orElseThrow(
+                        () -> new IllegalArgumentException("Subject does not exist")
+                )
+        )).orElseThrow(
+                () -> new IllegalArgumentException("Lesson does not exist")
+        );
+        lessonRepository.delete(lesson);
+        return "lesson has been deleted";
+    }
 }
