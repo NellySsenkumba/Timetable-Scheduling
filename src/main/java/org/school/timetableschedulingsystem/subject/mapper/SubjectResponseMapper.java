@@ -11,6 +11,7 @@ public class SubjectResponseMapper {
 
     public static SubjectResponseDto mapToDto(Subject subject) {
         return new SubjectResponseDto(
+                subject.getId(),
                 subject.getName(),
                 subject.getDescription()
         );

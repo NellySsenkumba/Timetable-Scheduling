@@ -16,6 +16,7 @@ public class StreamResponseMapper {
     }
      public static StreamResponse mapToStreamResponse(Stream stream) {
         return new StreamResponse(
+                stream.getId(),
                 stream.getName(),
                 stream.getClassTeacher().getFirstName()
 
