@@ -19,6 +19,8 @@ public class LessonRequestHandler extends RequestHandler {
                 return lessonService.addLesson(clientRequest);
             case "all-lessons":
                 return this.lessonService.allLessons();
+            case "delete-lesson":
+                return this.lessonService.deleteLesson(clientRequest);
             default:
                 return nextRequestHandler.handleRequest(clientRequest);
         }
