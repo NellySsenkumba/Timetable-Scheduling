@@ -12,23 +12,13 @@ public class SubjectRequestHandler extends RequestHandler {
 
     @Override
     public Object handleRequest(ClientRequest request) {
-        switch (request.action()) {
-            case "all-subjects": {
-                return subjectServiceImpl.allSubjects();
-            }
-            case "add-subject": {
-                return subjectServiceImpl.addSubject(request);
-            }
-            case "delete-subject": {
-                return subjectServiceImpl.deleteSubject(request);
-            }
-            case "update-subject": {
-                return subjectServiceImpl.updateSubject(request);
-            }
-            default: {
-                return nextRequestHandler.handleRequest(request);
-            }
-        }
+        return switch (request.action()) {
+            case "all-subjects" -> subjectServiceImpl.allSubjects();
+            case "add-subject" -> subjectServiceImpl.addSubject(request);
+            case "delete-subject" -> subjectServiceImpl.deleteSubject(request);
+            case "update-subject" -> subjectServiceImpl.updateSubject(request);
+            default -> nextRequestHandler.handleRequest(request);
+        };
 
     }
 

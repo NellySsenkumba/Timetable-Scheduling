@@ -14,21 +14,12 @@ public class TeacherRequestHandler extends RequestHandler {
     @Override
     public Object handleRequest(ClientRequest request) {
 
-        switch (request.action()) {
-            case "add-teacher":
-                return teacherService.addTeacher(request);
-
-            case "all-teacher": {
-                return teacherService.allTeachers();
-            }
-            case "update-teacher": {
-                return teacherService.updateTeacher(request);
-            }
-
-            default: {
-                return nextRequestHandler.handleRequest(request);
-            }
-        }
+        return switch (request.action()) {
+            case "add-teacher" -> teacherService.addTeacher(request);
+            case "all-teacher" -> teacherService.allTeachers();
+            case "update-teacher" -> teacherService.updateTeacher(request);
+            default -> nextRequestHandler.handleRequest(request);
+        };
 
 
     }

@@ -11,14 +11,11 @@ public class TimetableRequestHandler extends RequestHandler{
     private final TimetableService timetableService;
     @Override
     Object handleRequest(ClientRequest clientRequest) {
-        switch (clientRequest.action()) {
-            case "view-timetables":
-                return timetableService.viewTimetables(clientRequest);
-            case "teacher-timetable":
-                return timetableService.viewTeacherTimetable(clientRequest);
-            default:
-                return nextRequestHandler.handleRequest(clientRequest);
-        }
+        return switch (clientRequest.action()) {
+            case "view-timetables" -> timetableService.viewTimetables(clientRequest);
+            case "teacher-timetable" -> timetableService.viewTeacherTimetable(clientRequest);
+            default -> nextRequestHandler.handleRequest(clientRequest);
+        };
 
     }
 }

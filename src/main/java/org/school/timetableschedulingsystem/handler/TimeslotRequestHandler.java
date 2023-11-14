@@ -12,18 +12,12 @@ public class TimeslotRequestHandler extends RequestHandler {
 
     @Override
     Object handleRequest(ClientRequest clientRequest) {
-        switch (clientRequest.action()) {
-            case "add-timeslot":
-                return timeslotService.addTimeslot(clientRequest);
-            case "all-timeslot":
-                return timeslotService.getTimeslot();
-            case "delete-timeslot":
-                return timeslotService.deleteTimeslot(clientRequest);
-            case "assign-lesson":
-                return timeslotService.assign();
-
-            default:
-                return this.nextRequestHandler.handleRequest(clientRequest);
-        }
+        return switch (clientRequest.action()) {
+            case "add-timeslot" -> timeslotService.addTimeslot(clientRequest);
+            case "all-timeslot" -> timeslotService.getTimeslot();
+            case "delete-timeslot" -> timeslotService.deleteTimeslot(clientRequest);
+            case "assign-lesson" -> timeslotService.assign();
+            default -> this.nextRequestHandler.handleRequest(clientRequest);
+        };
     }
 }

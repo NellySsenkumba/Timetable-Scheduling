@@ -13,22 +13,12 @@ public class StreamRequestHandler extends RequestHandler {
 
     @Override
     Object handleRequest(ClientRequest clientRequest) {
-        switch (clientRequest.action()) {
-            case "add-stream": {
-                return streamService.addStream(clientRequest);
-            }
-            case "all-streams": {
-                return streamService.allStreams();
-            }
-            case "update-stream": {
-                return streamService.updateStream(clientRequest);
-            }
-            case "delete-stream": {
-                return streamService.deleteStream(clientRequest);
-            }
-
-            default:
-                return nextRequestHandler.handleRequest(clientRequest);
-        }
+        return switch (clientRequest.action()) {
+            case "add-stream" -> streamService.addStream(clientRequest);
+            case "all-streams" -> streamService.allStreams();
+            case "update-stream" -> streamService.updateStream(clientRequest);
+            case "delete-stream" -> streamService.deleteStream(clientRequest);
+            default -> nextRequestHandler.handleRequest(clientRequest);
+        };
     }
 }
