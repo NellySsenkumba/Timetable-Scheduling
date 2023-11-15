@@ -17,6 +17,7 @@ public class SubjectRequestHandler extends RequestHandler {
             case "add-subject" -> subjectServiceImpl.addSubject(request);
             case "delete-subject" -> subjectServiceImpl.deleteSubject(request);
             case "update-subject" -> subjectServiceImpl.updateSubject(request);
+            case "get-subject" -> subjectServiceImpl.getSubject(request);
             default -> nextRequestHandler.handleRequest(request);
         };
 

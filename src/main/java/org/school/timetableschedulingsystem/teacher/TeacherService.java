@@ -3,6 +3,7 @@ package org.school.timetableschedulingsystem.teacher;
 import lombok.RequiredArgsConstructor;
 import org.school.timetableschedulingsystem.controller.ClientRequest;
 import org.school.timetableschedulingsystem.exceptions.MissingFieldsException;
+import org.school.timetableschedulingsystem.exceptions.NotFoundException;
 import org.school.timetableschedulingsystem.models.database.Teacher;
 import org.school.timetableschedulingsystem.models.enums.Gender;
 import org.school.timetableschedulingsystem.teacher.dto.AddTeacherDto;
@@ -105,5 +106,16 @@ public class TeacherService {
         }
         teacherRepository.deleteById(teacherId);
         return "Teacher Deleted";
+    }
+
+    public TeacherResponseDto singleTeacher(ClientRequest request) {
+        Map<String, Object> data = request.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long teacherId = CustomUtils.convertStringToLong(data.get("id"));
+        return TeacherResponseDto.fromTeacher(teacherRepository.findById(teacherId).orElseThrow(
+                () -> new NotFoundException("Teacher does not exist")
+        ));
     }
 }

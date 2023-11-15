@@ -13,4 +13,6 @@ public interface SubjectService {
     SubjectResponseDto updateSubject(ClientRequest request);
 
     String deleteSubject(ClientRequest request);
+
+    SubjectResponseDto getSubject(ClientRequest request);
 }

@@ -78,4 +78,19 @@ public class SubjectServiceImpl implements SubjectService {
         subjectRepository.deleteById(subjectId);
         return "Subject Deleted";
     }
+
+    @Override
+    public SubjectResponseDto getSubject(ClientRequest request) {
+        Map<String, Object> data = request.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long subjectId = CustomUtils.convertStringToLong(data.get("id"));
+
+        return SubjectResponseMapper.mapToDto(subjectRepository.findById(subjectId).orElseThrow(
+                () -> new IllegalArgumentException("Subject does not exist")
+        ));
+    }
+
+
 }

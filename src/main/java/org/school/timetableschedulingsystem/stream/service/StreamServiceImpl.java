@@ -91,4 +91,17 @@ public class StreamServiceImpl implements StreamService {
         return "Stream has been deleted";
     }
 
+    @Override
+    public AddStreamResponse getStream(ClientRequest clientRequest) {
+        var data = clientRequest.data();
+        if (!data.containsKey("id")) {
+            throw new MissingFieldsException();
+        }
+        long streamId = CustomUtils.convertStringToLong(data.get("id"));
+        Stream stream = streamRepository.findById(streamId).orElseThrow(
+                () -> new IllegalArgumentException("Stream does not exist")
+        );
+        return StreamResponseMapper.mapToResponse(stream);
+    }
+
 }

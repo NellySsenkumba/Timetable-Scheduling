@@ -18,6 +18,7 @@ public class StreamRequestHandler extends RequestHandler {
             case "all-streams" -> streamService.allStreams();
             case "update-stream" -> streamService.updateStream(clientRequest);
             case "delete-stream" -> streamService.deleteStream(clientRequest);
+            case "get-stream" -> streamService.getStream(clientRequest);
             default -> nextRequestHandler.handleRequest(clientRequest);
         };
     }

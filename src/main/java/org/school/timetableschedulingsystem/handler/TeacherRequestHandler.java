@@ -18,6 +18,8 @@ public class TeacherRequestHandler extends RequestHandler {
             case "add-teacher" -> teacherService.addTeacher(request);
             case "all-teacher" -> teacherService.allTeachers();
             case "update-teacher" -> teacherService.updateTeacher(request);
+            case "delete-teacher" -> teacherService.deleteTeacher(request);
+            case "get-teacher" -> teacherService.singleTeacher(request);
             default -> nextRequestHandler.handleRequest(request);
         };
 

@@ -17,5 +17,6 @@ public interface StreamService {
     String deleteStream(ClientRequest clientRequest);
 
 
+    AddStreamResponse getStream(ClientRequest clientRequest);
 }
 
