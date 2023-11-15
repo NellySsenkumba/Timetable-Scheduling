@@ -35,10 +35,7 @@ public class Teacher {
     private String email;
 
     @Column(nullable = false)
-    private long phoneNumber;
-
-    @Column(nullable = false)
-    private LocalDate dateOfBirth;
+    private String phoneNumber;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime registeredOn;

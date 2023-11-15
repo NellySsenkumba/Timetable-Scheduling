@@ -6,7 +6,6 @@ public record AddTeacherDto(
         @NonNull String firstName,
         @NonNull String lastName,
         String email,
-        int phoneNumber,
-        String dateOfBirth
+        String phoneNumber
 ) {
 }

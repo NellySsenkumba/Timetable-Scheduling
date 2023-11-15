@@ -54,9 +54,8 @@ public class TeacherService {
                 .lastName((String) data.get("lastName"))
                 .middleName((String) data.get("middleName"))
                 .email((String) data.get("email"))
-                .phoneNumber((int) data.get("phoneNumber"))
+                .phoneNumber((String) data.get("phoneNumber"))
                 .gender(Gender.valueOf((String) data.get("gender")))
-                .dateOfBirth(date)
                 .build();
 
         return TeacherResponseDto.fromTeacher(teacherRepository.saveAndFlush(teacher));
@@ -85,13 +84,9 @@ public class TeacherService {
             teacher.setEmail((String) data.get("email"));
         }
         if (data.containsKey("phoneNumber")) {
-            teacher.setPhoneNumber((int) data.get("phoneNumber"));
+            teacher.setPhoneNumber((String) data.get("phoneNumber"));
         }
-        if (data.containsKey("dateOfBirth")) {
-            String dateString = (String) data.get("dateOfBirth");
-            LocalDate date = LocalDate.parse(dateString, formatter);
-            teacher.setDateOfBirth(date);
-        }
+
         return TeacherResponseDto.fromTeacher(teacherRepository.saveAndFlush(teacher));
     }
 

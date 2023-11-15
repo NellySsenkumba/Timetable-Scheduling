@@ -11,8 +11,8 @@ public record TeacherResponseDto(
         String middleName,
         String lastName,
         String email,
-        long phoneNumber,
-        LocalDate dateOfBirth,
+        String phoneNumber,
+
         Gender gender
 
 ) {
@@ -24,7 +24,6 @@ public record TeacherResponseDto(
                 teacher.getLastName(),
                 teacher.getEmail(),
                 teacher.getPhoneNumber(),
-                teacher.getDateOfBirth(),
                 teacher.getGender()
         );
     }
