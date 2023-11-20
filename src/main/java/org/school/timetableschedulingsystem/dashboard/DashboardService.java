@@ -46,7 +46,7 @@ public class DashboardService {
         Set<NumberOfTeachersPerClass> response = new HashSet<>();
         List<Stream> streams = streamRepository.findAll();
         streams.forEach(stream -> {
-            List<Lesson> lessons = lessonRepository.findAllById_Stream(stream);
+            List<Lesson> lessons = lessonRepository.findAllById_Stream_ClassRoom(stream.getClassRoom());
             List<Lesson> uniqueTeacherLessons = lessons.stream()
                     .collect(Collectors.groupingBy(
                             lesson -> lesson.getId().getTeacher(), // Grouping by teacher

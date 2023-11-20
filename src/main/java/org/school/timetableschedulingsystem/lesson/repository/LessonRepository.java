@@ -15,5 +15,6 @@ public interface LessonRepository extends JpaRepository<Lesson, LessonCompositeP
     List<Lesson> findAllById_Teacher(Teacher teacher);
 
     List<Lesson> findAllById_Stream(Stream stream);
+    List<Lesson> findAllById_Stream_ClassRoom(String  classroom);
 
 }
