@@ -40,6 +40,7 @@ public class StreamServiceImpl implements StreamService {
                                 new IllegalArgumentException("Teacher does not exist")
                         )
                 )
+                .classRoom((String) data.get("classRoom"))
                 .build();
         return StreamResponseMapper.mapToResponse(streamRepository.saveAndFlush(stream));
     }

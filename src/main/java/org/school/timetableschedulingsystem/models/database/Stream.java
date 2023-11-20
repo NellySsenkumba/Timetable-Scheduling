@@ -26,6 +26,9 @@ public class Stream {
     @JoinColumn(nullable = false)
     private Teacher classTeacher;
 
+    @Column(nullable = false,name = "class",columnDefinition = "VARCHAR(10) DEFAULT 'PRIMARY 1'")
+    private String classRoom;
+
 
     @ManyToOne
     @JoinColumn(nullable = true)

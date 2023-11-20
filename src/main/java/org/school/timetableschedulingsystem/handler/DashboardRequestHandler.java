@@ -13,6 +13,7 @@ public class DashboardRequestHandler extends RequestHandler{
     Object handleRequest(ClientRequest clientRequest) {
         return switch (clientRequest.action()){
             case "dashboard" ->dashboardService.show(clientRequest.data());
+            case "teachers-per-class" ->dashboardService.numberOfTeachersPerClass();
             default -> nextRequestHandler.handleRequest(clientRequest);
         };
     }

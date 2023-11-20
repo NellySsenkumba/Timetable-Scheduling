@@ -1,10 +1,11 @@
 package org.school.timetableschedulingsystem.controller;
 
-public record ServerResponse(
+public record ServerResponse<T>(
         String status,
-        Object data
+        T data
+
 ) {
-    public ServerResponse(Object data) {
+    public ServerResponse(T data) {
         this("0", data);
     }
 }
